@@ -7,44 +7,44 @@ import java.util.*;
 
 public class Renderer  
 {
-    private ShaderProgram program;
+    private static ShaderProgram Program;
 
-    private Shader vertex;
+    private static Shader Vertex;
     
-    private Shader fragment;
+    private static Shader Fragment;
 
-    private VAO vao;
+    private static VAO Vao;
 
-    private VBO vbo;
+    private static VBO Vbo;
 
-    private ArrayList<Sprite> sprites;
+    private static ArrayList<Sprite> Sprites;
 
     public Renderer(String vertexShdPath, String fragmentShdPath)
     {
-        this.vertex = new Shader(vertexShdPath, ShaderType.VERTEX);
-        this.fragment = new Shader(fragmentShdPath, ShaderType.FRAGMENT);
+        Vertex = new Shader(vertexShdPath, ShaderType.VERTEX);
+        Fragment = new Shader(fragmentShdPath, ShaderType.FRAGMENT);
 
-        this.program = new ShaderProgram();
-        program.attach(vertex);
-        program.attach(fragment);
+        Program = new ShaderProgram();
+        Program.attach(Vertex);
+        Program.attach(Fragment);
 
-        this.vao = new VAO();
-        this.vbo = new VBO();
+        Vao = new VAO();
+        Vbo = new VBO();
 
-        this.sprites = new ArrayList<Sprite>();
+        Sprites = new ArrayList<Sprite>();
     }
 
     public void destroy()
     {
-        program.dispose();
-        vertex.dispose();
-        fragment.dispose();
+        Program.dispose();
+        Vertex.dispose();
+        Fragment.dispose();
 
-        vao.dispose();
-        vbo.dispose();
+        Vao.dispose();
+        Vbo.dispose();
 
         // TODO: Performance issues ?
-        sprites.forEach((s) -> s.dispose());
-        sprites.clear();
+        Sprites.forEach((s) -> s.dispose());
+        Sprites.clear();
     }
 }
