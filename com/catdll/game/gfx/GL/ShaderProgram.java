@@ -45,8 +45,6 @@ public class ShaderProgram extends Disposable
     {
         if (!isDisposed)
         {
-            attachedShaders.forEach((s) -> detach(s));
-
             glDeleteProgram(this.id);
             this.id = GL_NONE;
         }

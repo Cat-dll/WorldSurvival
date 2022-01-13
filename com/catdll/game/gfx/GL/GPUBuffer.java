@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL40.*;
 
 import com.catdll.game.*;
 
-public class VBO extends Disposable
+public class GPUBuffer extends Disposable
 {
     private int id;
 
@@ -12,8 +12,11 @@ public class VBO extends Disposable
     
     private int usedMemory;
 
-    public VBO()
+    private int type;
+
+    public GPUBuffer(int type)
     {
+        this.type = type;
         this.size = 0;
         this.usedMemory = 0;
         this.id = glGenBuffers();
@@ -24,7 +27,7 @@ public class VBO extends Disposable
         if (size != 0)
         {
             this.size = size;
-            glBufferData(GL_ARRAY_BUFFER, size, GL_STREAM_DRAW);
+            glBufferData(type, size, GL_STREAM_DRAW);
         }
     }
 
@@ -33,11 +36,11 @@ public class VBO extends Disposable
         if (newSize > this.size) 
         {
             int newVBO = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, newVBO);
-            glBufferData(GL_ARRAY_BUFFER, newSize, GL_STREAM_DRAW);
+            glBindBuffer(type, newVBO);
+            glBufferData(type, newSize, GL_STREAM_DRAW);
 
             glBindBuffer(GL_COPY_READ_BUFFER, this.id);
-            glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_ARRAY_BUFFER, 0, 0, this.size);
+            glCopyBufferSubData(GL_COPY_READ_BUFFER, type, 0, 0, this.size);
 
             this.size = newSize;
             this.id = newVBO;
@@ -48,31 +51,32 @@ public class VBO extends Disposable
     public void data(float[] data)
     {
         this.usedMemory += data.length * Float.BYTES;
-        glBufferSubData(GL_ARRAY_BUFFER, usedMemory, data);
+        glBufferSubData(type, usedMemory, data);
     }
 
     public void data(double[] data)
     {
         this.usedMemory += data.length * Double.BYTES;
-        glBufferSubData(GL_ARRAY_BUFFER, usedMemory, data);
+        glBufferSubData(type, usedMemory, data);
     }
 
     public void data(int[] data)
     {
         this.usedMemory += data.length * Integer.BYTES;
-        glBufferSubData(GL_ARRAY_BUFFER, usedMemory, data);
+        glBufferSubData(type, usedMemory, data);
     }
 
-    public void seek(int offset)
+    public void seek(int pos)
     {
-        if (offset > 0 && offset < this.size)
-            this.usedMemory = offset;
+        if (pos >= 0 && pos < this.size)
+            this.usedMemory = pos;
     }
 
     public void bind()
     {
-        glBindBuffer(GL_ARRAY_BUFFER, this.id);
+        glBindBuffer(type, this.id);
     }
+
     
     @Override
     public void dispose()
@@ -92,4 +96,6 @@ public class VBO extends Disposable
     public int getUsedMemory() { return this.usedMemory; }
 
     public int getSize() { return this.size; }
+
+    public int getType() { return this.type; }
 }

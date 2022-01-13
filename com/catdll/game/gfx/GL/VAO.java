@@ -18,7 +18,7 @@ public class VAO extends Disposable
         glBindVertexArray(this.id);
     }
 
-    public void attribute(int index, int size, int type, int stride, long pointer)
+    public void attribute(int index, int size, int type, boolean normalized, int stride, long pointer)
     {
         switch (type)
         {

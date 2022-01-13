@@ -1,6 +1,7 @@
 package com.catdll.game.gfx;
 
-public record Color(double r, double g, double b, double a)
+
+public class Color
 {
     public static final Color WHITE   = new Color(250, 250, 253);
     public static final Color BLACK   = new Color(6, 6, 10);
@@ -16,13 +17,34 @@ public record Color(double r, double g, double b, double a)
     public static final Color CYAN    = new Color(65, 166, 246);
     public static final Color LIME    = new Color(167, 240, 112);
 
-    public Color(double r, double g, double b)
+    public float r;
+
+    public float g;
+    
+    public float b;
+
+    public float a;
+
+    public Color(float r, float g, float b, float a)
+    {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+    }
+
+    public Color(int r, int g, int b, int a)
+    {
+        this(r / 255f, g / 255f, b / 255f, a / 255f);
+    }
+
+    public Color(int r, int g, int b)
     {
         this(r, g, b, 255);
     }
 
-    public Color normalize()
+    public int toHexa()
     {
-        return new Color(255.0 / r, 255.0 / g, 255.0 / b, 255.0 / a);
+        return (((int)r & 0xFF) << 24) + (((int)g & 0xFF) << 16) + (((int)b & 0xFF) << 8) + ((int)a & 0xFF);
     }
 } 

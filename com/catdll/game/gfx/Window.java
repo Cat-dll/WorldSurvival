@@ -14,21 +14,19 @@ import java.awt.image.BufferedImage;
 public class Window 
 {
     // GLFW window
-    private static Renderer CurrentRenderer;
-
     private static long CurrentWindow;
 
     private static GLFWImage.Buffer Icon;
 
-    private static String Title;
+    private static String Title = "Game";
 
-    private static int Width, Height;
+    private static int Width, Height = 0;
 
-    private static boolean IsFocused;
+    private static boolean IsFocused = false;
 
-    private static boolean IsMaximized;
+    private static boolean IsMaximized = false;
 
-    private static boolean IsClosed;
+    private static boolean IsClosed = false;
 
     // Stats
     private static int Fps, Frames = 0;
@@ -42,7 +40,7 @@ public class Window
 
     private static GLFWWindowCloseCallback CloseCallback;
 
-    private static GLFWWindowSizeCallback ResizeCallback;
+    private static GLFWFramebufferSizeCallback FramebufferCallback;
 
     private static GLFWWindowFocusCallback FocusCallback;
 
@@ -50,7 +48,7 @@ public class Window
 
     private static boolean IsInit;
 
-    public void init(String title, int width, int height)
+    public static void init(String title, int width, int height)
     {
         if (!IsInit)
         {
@@ -58,16 +56,11 @@ public class Window
             Width = width;
             Height = height;
 
-            IsFocused = false;
-            IsMaximized = false;
-            IsClosed = false;
-
             if (!glfwInit())
             {
                 Main.LOG.severe("Failure to create window!" + glfwGetVersionString());
                 throw new Error();
             }
-
 
             glfwDefaultWindowHints();
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_FALSE);
@@ -114,22 +107,25 @@ public class Window
                 }    
             });
 
-            glfwSetWindowSizeCallback(CurrentWindow, ResizeCallback = new GLFWWindowSizeCallback() {
+            glfwSetFramebufferSizeCallback(CurrentWindow, FramebufferCallback = new GLFWFramebufferSizeCallback() {
                 @Override
                 public void invoke(long window, int newWidth, int newHeight)
                 {
-                    setDisplay(newWidth, newHeight);
+                    Renderer.RenderWidth = newWidth;
+                    Renderer.RenderHeight = newHeight;
                 }
             });
 
             glfwMakeContextCurrent(CurrentWindow);
             glfwSwapInterval(1);
 
+            Renderer.init("C:\\Users\\HP\\eclipse-workspace\\MineAndCraft\\MineAndCraft\\com\\catdll\\game\\resources\\vertex.shader", "C:\\Users\\HP\\eclipse-workspace\\MineAndCraft\\MineAndCraft\\com\\catdll\\game\\resources\\fragment.shader");
+
             IsInit = true;
         }
     }
 
-    public void loop(Runnable tick, Runnable render, Runnable update)
+    public static void loop(Runnable tick, Runnable render, Runnable update)
     {
         while (!IsClosed)
         {
@@ -160,21 +156,13 @@ public class Window
     {
         try
         {
-            ErrorCallback.close();
+            /*
             ErrorCallback = null;
-
-            ResizeCallback.close();
-            ResizeCallback = null;
-
-            MaximizeCallback.close();
+            FramebufferCallback = null;
             MaximizeCallback = null;
-
-            CloseCallback.close();
             CloseCallback = null;
-
-            FocusCallback.close();
             FocusCallback = null;
-
+            */
             glfwFreeCallbacks(CurrentWindow);
         }
         catch (Exception e)
@@ -190,23 +178,25 @@ public class Window
         }
 
         glfwTerminate();
+
+        Renderer.destroy();
     }
 
     // Setters
-    public void setTitle(String title)
+    public static void setTitle(String title)
     {
         Title = title;
         glfwSetWindowTitle(CurrentWindow, Title);
     }
 
-    public void setDisplay(int width, int height)
+    public static void setDisplay(int width, int height)
     {
         Width = width;
         Height = height;
         glfwSetWindowSize(CurrentWindow, Width, Height);
     }
 
-    public void setIcon(BufferedImage image)
+    public static void setIcon(BufferedImage image)
     {
         int imageSize = image.getWidth() * image.getHeight() * 4;
 
@@ -232,22 +222,22 @@ public class Window
     }
 
     // Getters
-    public boolean isClose() { return IsClosed; }
+    public static boolean isClose() { return IsClosed; }
 
-    public boolean isMaximize() { return IsMaximized; }
+    public static boolean isMaximize() { return IsMaximized; }
 
-    public boolean isFocus() { return IsFocused; }
+    public static boolean isFocus() { return IsFocused; }
 
-    public String getTitle() { return new String(Title); }
+    public static String getTitle() { return new String(Title); }
 
-    public int getWidth() { return Width; }
+    public static int getWidth() { return Width; }
 
-    public int getHeight() { return Height; }
+    public static int getHeight() { return Height; }
 
-    public int getFPS() { return Fps; }
+    public static int getFPS() { return Fps; }
 
-    public double getFrametime() { return Frametime; }
+    public static double getFrametime() { return Frametime; }
 
-    public double getDeltatime() { return DeltaTime; }
+    public static double getDeltatime() { return DeltaTime; }
 
 }

@@ -6,9 +6,9 @@ import com.catdll.game.*;
 
 public class Texture2D extends Disposable
 {
-    public int id;
+    private int id;
     
-    public int width, height;
+    private int width, height;
 
     public Texture2D(int width, int height, int[] data)
     {
@@ -25,7 +25,16 @@ public class Texture2D extends Disposable
         glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA32I, width, height, 0, GL_RGBA, GL_UNSIGNED_INT, data);
     }
 
+    public void bind()
+    {
+        glBindTexture(GL_TEXTURE_2D, this.id);
+    }
+
     public int getID() { return this.id; }
+
+    public int getWidth() { return this.width; }
+
+    public int getHeight() { return this.height; }
 
     @Override
     public void dispose()
@@ -37,5 +46,20 @@ public class Texture2D extends Disposable
             this.width = 0;
             this.height = 0;
         }
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == this)
+            return false;
+
+        if (o instanceof Texture2D)
+        {
+            Texture2D oTexture = (Texture2D)o;
+            return oTexture.id == this.id;
+        }
+        else
+            return false;
     }
 }

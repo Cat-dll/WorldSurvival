@@ -10,8 +10,6 @@ public class Sprite extends Disposable
 
     private Rectangle sources;
 
-    private int width, height;
-
     public float posX, posY;
 
     public Color color;
@@ -40,7 +38,7 @@ public class Sprite extends Disposable
         this.originY = 0.0f;
 
         // Entire texture
-        this.sources = new Rectangle(0.0f, 0.0f, this.width, this.height);
+        this.sources = new Rectangle(0.0f, 0.0f, texture.getWidth(), texture.getHeight());
     }
 
     public Sprite(Texture2D texture, float posX, float posY, Color color) { this(texture, posX, posY, color, 0); }
@@ -52,8 +50,8 @@ public class Sprite extends Disposable
     {
         if (!isDisposed)
         {
-            this.width = 0;
-            this.height = 0;
+            this.sources.width = 0;
+            this.sources.height = 0;
 
             texture.dispose();
             texture = null;
@@ -61,8 +59,14 @@ public class Sprite extends Disposable
     }
     
     // Setters
-
     public void setSources(Rectangle sources) { this.sources = sources; }
 
+    // Getters
+    public float getWidth() { return this.sources.width * scaleX; }
+
+    public float getHeight() { return this.sources.height * scaleY; }
+
     public Rectangle getSources() { return new Rectangle(sources.x, sources.y, sources.width, sources.height); }
+
+    public Texture2D getTexture() { return this.texture; }
 }
