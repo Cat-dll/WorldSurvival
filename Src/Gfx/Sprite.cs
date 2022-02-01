@@ -3,9 +3,9 @@ namespace WorldSurvival.Gfx
 {
     public class Sprite
     {
-        public Texture2D Texture;
+        public Texture2D Texture { get; private set; }
 
-        public Rectangle Source;
+        private Rectangle source;
 
         public Color Color;
 
@@ -15,29 +15,45 @@ namespace WorldSurvival.Gfx
 
         public float Rotation { get; set; }
 
-        public Sprite(Texture2D texture) : this(texture, Color.White) { /* Void */ }
+        public SpriteEffects Effect { get; set; }
 
+        private Rectangle rect;
+
+        public Sprite(Texture2D texture) : this(texture, Color.White) { /* Void */ }
         public Sprite(Texture2D texture, Color color) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height), 0.0f, color) { /* Void */ }
         public Sprite(Texture2D texture, Rectangle source, float rotation, Color color)
         {
+            this.source = source;
+            this.rect = source;
+
             Texture = texture;
-            Source = source;
             Color = color;
 
             Rotation = rotation;
-            Width = texture.Width;
-            Height = texture.Height;
+            Width = rect.Width;
+            Height = rect.Height;
+            Effect = SpriteEffects.None;
         }
 
+        // TODO: Implement camera 
         public void Render(float posX, float posY) => Batch.Draw(
             Texture, 
-            new Rectangle((int)posX, (int)posY, Source.Width * 3, Source.Height * 3), 
-            Source,
+            new Rectangle((int)posX, (int)posY, Width, Height), 
+            rect,
             Color,
             Rotation,
             Vector2.Zero, 
-            SpriteEffects.None, 
+            Effect, 
             1
         );
+
+        #region Getters and Setters
+        public void SetRectangle(Rectangle rectangle)
+        {
+            rect = new(source.X + rectangle.X, source.Y + rectangle.Y, rectangle.Width, rectangle.Height);
+        }
+
+        public Rectangle GetRectangle(Rectangle rectangle) => new(rectangle.X - source.X, rectangle.Y - source.Y, rectangle.Width, rectangle.Height);
+        #endregion
     }
 }

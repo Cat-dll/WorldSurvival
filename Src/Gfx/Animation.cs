@@ -1,120 +1,95 @@
-using System;
+﻿using System;
 using WorldSurvival.Utils;
+using WorldSurvival.Tile;
+
 namespace WorldSurvival.Gfx
 {
-    // TODO: Rework animation
     public class Animation
     {
         #region Data
-        public Sprite _sprite { get; private set; }
 
-        public int FrameSize { get; set; }
-
-        public int Length { get; set; }
-
-        private int _offsetX;
-        public int OffsetX
+        private AnimationData currentAnimationData;
+        public AnimationData CurrentAnimationData
         {
-            get => _offsetX;
+            get => currentAnimationData;
             set
             {
-                _offsetX = value;
-                Reset();
+                currentAnimationData = value;
+                Indexes = 0;
+                timer = 0.0f;
             }
         }
 
-        private int _offsetY;
-        public int OffsetY
-        {
-            get => _offsetY;
+        public Sprite Sprite { get; set; }
+
+        private int indexes;
+        public int Indexes
+        { 
+            get => indexes;
             set
             {
-                _offsetY = value;
-                Reset();
+                indexes = value;
+                UpdateFrame();
             }
         }
 
         public float Delay { get; set; }
 
-        public Direction Direction; 
+        public bool Pause { get; private set; }
 
-        public int Indexes { get; private set; }
-
-        private float _timer;
-
-        private Rectangle _currentFrame;
-
-        private bool _loopFinish;
-
+        private float timer;
         #endregion
 
-        public Animation(Sprite source, int frameSize, int animationSize, float delay) : this(source, frameSize, animationSize, delay, Direction.East) { }
-
-        public Animation(Sprite source, int frameSize, int animationSize, float delay, Direction animationDirection)
+        public Animation(Sprite sprite, AnimationData animation, float delay)
         {
-            FrameSize = frameSize;
-            Length = animationSize;
-            Delay = delay;
+            this.Sprite = sprite;
+            this.CurrentAnimationData = animation;
+            this.Delay = delay;
+            this.Pause = false;
+            this.Indexes = 0;
 
-            Indexes = 0;
-            Direction = animationDirection;
-
-            _sprite = source;
-            _offsetX = 0;
-            _offsetY = 0;
-            _timer = 0;
-            _currentFrame = new Rectangle(0, 0, FrameSize, FrameSize);
-            _loopFinish = false;
+            this.timer = 0.0f;
         }
 
         public void Animate(bool looping)
         {
-            if (_loopFinish)
-                return;
-
-            _timer += Time.CurrentFrameTime;
-            if (_timer >= Delay)
+            if (!Pause)
             {
-                Indexes++;
-                if (Indexes >= Length)
+                timer += Time.CurrentFrameTime;
+                if (timer >= Delay)
                 {
-                    if (looping)
-                        Reset();
+                    if (Indexes + 1 >= currentAnimationData.Length)
+                    {
+                        Pause = looping;
+                        Indexes = 0;
+                    }
                     else
-                        _loopFinish = true;
-                }
-                else
-                    SetFrame(Indexes);
+                        Indexes++;
 
-                _timer = 0;
+                    timer = 0.0f;
+                }
             }
         }
 
-        public void Reset()
+        protected void UpdateFrame()
         {
-            Indexes = 0;
-            _currentFrame.X = _offsetX;
-            _currentFrame.Y = _offsetY;
-            _sprite.Source = _currentFrame;
-        }
+            TileCoord coord = new(0, 0);
+            coord.Tx = Indexes % currentAnimationData.Rows;
+            coord.Ty = (int)MathF.Floor(Indexes / currentAnimationData.Rows);
 
-        public void SetFrame(int index)
-        {
-            var x = Direction.Dx * index * FrameSize + _offsetX;
-            var y = Direction.Dy * index * FrameSize + _offsetY;
-
-            // NOTE: Collision ??
-            if (x + FrameSize > _sprite.Width && y + FrameSize > _sprite.Height && x < 0 && y < 0)
-                throw new ArgumentException("Animation frame is out of the sprite size!");
-
-            _currentFrame.X = x;
-            _currentFrame.Y = y;
-            _sprite.Source = _currentFrame;
-
-            Indexes = index;
+            this.Sprite.SetRectangle(currentAnimationData.GetFrame(coord));
         }
 
         #region Getters and Setters
+        public void Start() => Pause = false;
+        public void Stop(bool reset)
+        {
+            if (!Pause)
+            {
+                Pause = true;
+                Indexes = reset ? 0 : Indexes;
+            }
+        }
         #endregion
     }
 }

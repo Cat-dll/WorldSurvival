@@ -11,13 +11,15 @@ namespace WorldSurvival
 {
     public class WorldSurvival : Game
     {
+        public static bool GameExit { get; set; } = false;
+
         public static IState CurrentState { get; private set; }
 
         public static GraphicsDeviceManager GraphicsManager { get; private set; }
 
         public static SpriteBatch Batch { get; private set; }
 
-        private float _tpsTimer = 0;
+        private float tpsTimer = 0;
 
         public WorldSurvival()
         {
@@ -31,7 +33,7 @@ namespace WorldSurvival
             GraphicsManager.PreferredBackBufferWidth = GameSettings.GameWidth;
             GraphicsManager.PreferredBackBufferHeight = GameSettings.GameHeight;
             GraphicsManager.PreferHalfPixelOffset = false;
-            this._tpsTimer = 0;
+            this.tpsTimer = 0;
         }
 
         protected override void LoadContent()
@@ -44,17 +46,17 @@ namespace WorldSurvival
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || GameExit)
                 Exit();
 
             Time.Calculate(gameTime);
             Input.Update();
             
-            _tpsTimer += Time.CurrentFrameTime;
-            if (_tpsTimer > 1.0f / Time.Tps)
+            tpsTimer += Time.CurrentFrameTime;
+            if (tpsTimer > 1.0f / Time.Tps)
             {
                 CurrentState.Tick();
-                _tpsTimer = 0;
+                tpsTimer = 0;
             }
 
             CurrentState.Update();

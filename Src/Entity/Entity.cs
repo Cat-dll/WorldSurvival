@@ -5,8 +5,6 @@ namespace WorldSurvival.Entity
 {
     public class Entity
     {
-        // TODO: Set a tile coordinate (and implements TileCoord record)
-
         #region Data
         public static int EntitiesInGame { get; protected set; } = 0;
 
@@ -53,7 +51,7 @@ namespace WorldSurvival.Entity
         {
             float dx = Position.X - LastPosition.X, dy = Position.Y - LastPosition.Y;
             if (dx != 0 || dy != 0)
-                this.Direction = Direction.Get(Position - LastPosition);
+                this.Direction = Direction.Get(dx, dy);
 
             if (LastDirection != Direction)
                 DirectionChangeEvent?.Invoke(this);
