@@ -18,6 +18,7 @@ namespace WorldSurvival.Utils
 
         public static void LoadContent(ContentManager content)
         {
+            Console.WriteLine("Before loading");
             contentManager = content ?? throw new ArgumentNullException(nameof(content)); 
 
             // Texture
@@ -28,6 +29,7 @@ namespace WorldSurvival.Utils
             PlayerWalkBottom = new AnimationData(new(0, 0), new(2, 0), 16, 16); // TODO: Using another alternative for animation resources.
             PlayerWalkTop = new AnimationData(new(0, 3), new(2, 3), 16, 16);
             PlayerWalkLeft = new AnimationData(new(0, 1), new(2, 1), 16, 16);
+            Console.WriteLine("After loading");
         }
 
         public static void UnloadContent() => contentManager.Unload();
