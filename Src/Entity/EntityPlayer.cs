@@ -47,7 +47,7 @@ namespace WorldSurvival.Entity
             if (Direction == Direction.East || Direction == Direction.West)
             {
                 animation.CurrentAnimationData = Resources.PlayerWalkLeft;
-                sprite.Effect = Direction == Direction.East ? SpriteEffects.FlipHorizontally : sprite.Effect;
+                sprite.Effect = Direction == Direction.East ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             }
 
             if (Direction == Direction.North)
