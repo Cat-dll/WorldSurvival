@@ -1,9 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <OutputPath>$(ProjectDir)build\$(Configuration)\</OutputPath>
     <OutputType>Exe</OutputType>
+    <IntermediateOutputPath>$(ProjectDir)build\$(Configuration)\obj\</IntermediateOutputPath>
     <TargetFramework>net6.0-windows</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
   <PropertyGroup>
@@ -20,13 +23,5 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Content\bin\Windows\Content\Environment.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Content\bin\Windows\Content\GameFont.xnb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>
