@@ -1,6 +1,4 @@
-﻿global using static WorldSurvival.WorldSurvival;
-
-global using Microsoft.Xna.Framework;
+﻿global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 global using Microsoft.Xna.Framework.Content;
 global using Microsoft.Xna.Framework.Input;
@@ -11,7 +9,7 @@ namespace WorldSurvival
 {
     public class WorldSurvival : Game
     {
-        public static bool GameExit { get; set; } = false;
+        private static WorldSurvival Instance;
 
         public static IState CurrentState { get; private set; }
 
@@ -23,8 +21,9 @@ namespace WorldSurvival
 
         public WorldSurvival()
         {
+            Instance = this;
             GraphicsManager = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content/bin/Windows/Content";
+            Content.RootDirectory = "Data\\";
 
             this.IsMouseVisible = true;
             this.Window.AllowAltF4 = false;
@@ -46,7 +45,7 @@ namespace WorldSurvival
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || GameExit)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             Time.Calculate(gameTime);
@@ -81,5 +80,7 @@ namespace WorldSurvival
 
             base.UnloadContent();
         }
+
+        public static void Close() => Instance.Exit();
     }
 }

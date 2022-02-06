@@ -1,4 +1,5 @@
 ﻿using System;
+using WorldSurvival.Gfx.Animation;
 using WorldSurvival.Gfx;
 using WorldSurvival.Tile;
 
@@ -8,28 +9,28 @@ namespace WorldSurvival.Utils
     {
         private static ContentManager contentManager;
 
-        public static Texture2D EnvironmentTilesheet { get; private set; }
+        public static Texture2D WORLD_TEXTURE { get; private set; }
 
-        public static SpriteFont GameFont { get; private set; }
+        public static Spritesheet WORLD_SPRITESHEET { get; private set; }
 
-        public static AnimationData PlayerWalkBottom { get; private set; }
-        public static AnimationData PlayerWalkTop { get; private set; }
-        public static AnimationData PlayerWalkLeft { get; private set; }
+        public static SpriteFont GAME_FONT { get; private set; }
+
+        public static AnimationData PLAYER_ANIMATION { get; private set; }
 
         public static void LoadContent(ContentManager content)
         {
-            Console.WriteLine("Before loading");
-            contentManager = content ?? throw new ArgumentNullException(nameof(content)); 
+            contentManager = content;
 
             // Texture
-            EnvironmentTilesheet = contentManager.Load<Texture2D>("Environment");
-            GameFont = contentManager.Load<SpriteFont>("GameFont");
+            WORLD_TEXTURE = contentManager.Load<Texture2D>("Environment");
+            WORLD_SPRITESHEET = new Spritesheet(WORLD_TEXTURE, 16, 16);
+            GAME_FONT = contentManager.Load<SpriteFont>("GameFont");
 
-            // Animation
-            PlayerWalkBottom = new AnimationData(new(0, 0), new(2, 0), 16, 16); // TODO: Using another alternative for animation resources.
-            PlayerWalkTop = new AnimationData(new(0, 3), new(2, 3), 16, 16);
-            PlayerWalkLeft = new AnimationData(new(0, 1), new(2, 1), 16, 16);
-            Console.WriteLine("After loading");
+            // TODO: Implements animation resources
+            PLAYER_ANIMATION = new AnimationData();
+            PLAYER_ANIMATION.AddAnimation("PlayerWlkSth", new Animation(new Vector2(3, 1), 18, 0));
+            PLAYER_ANIMATION.AddAnimation("PlayerWlkNth", new Animation(new Vector2(3, 1), 18, 3));
+            PLAYER_ANIMATION.AddAnimation("PlayerWlkWst", new Animation(new Vector2(3, 1), 18, 1));
         }
 
         public static void UnloadContent() => contentManager.Unload();

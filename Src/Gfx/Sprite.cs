@@ -1,59 +1,46 @@
-﻿
+﻿using WorldSurvival.Tile;
+using System;
+
 namespace WorldSurvival.Gfx
 {
     public class Sprite
     {
-        public Texture2D Texture { get; private set; }
+        public Spritesheet Sheet { get; private set; }
 
-        private Rectangle source;
+        public int SpriteCoordX, SpriteCoordY;
 
         public Color Color;
 
-        public int Width { get; set; }
-
-        public int Height { get; set; }
+        public Vector2 Scale;
 
         public float Rotation { get; set; }
 
         public SpriteEffects Effect { get; set; }
 
-        private Rectangle rect;
-
-        public Sprite(Texture2D texture) : this(texture, Color.White) { /* Void */ }
-        public Sprite(Texture2D texture, Color color) : this(texture, new Rectangle(0, 0, texture.Width, texture.Height), 0.0f, color) { /* Void */ }
-        public Sprite(Texture2D texture, Rectangle source, float rotation, Color color)
+        
+        public Sprite(Spritesheet spritesheet, int spriteCoordX, int spriteCoordY)
         {
-            this.source = source;
-            this.rect = source;
+            this.Sheet = spritesheet;
+            this.SpriteCoordX = spriteCoordX;
+            this.SpriteCoordY = spriteCoordY;
 
-            Texture = texture;
-            Color = color;
+            this.Color = Color.White;
+            this.Rotation = 0.0f;
+            this.Scale = Vector2.One;
+            this.Effect = SpriteEffects.None;
 
-            Rotation = rotation;
-            Width = rect.Width;
-            Height = rect.Height;
-            Effect = SpriteEffects.None;
         }
 
         // TODO: Implement camera 
-        public void Render(float posX, float posY) => Batch.Draw(
-            Texture, 
-            new Rectangle((int)posX, (int)posY, Width, Height), 
-            rect,
+        public void Render(float posX, float posY) => WorldSurvival.Batch.Draw(
+            Sheet.Source, 
+            new Rectangle((int)posX, (int)posY, (int)(Sheet.SpriteWidth * Scale.X), (int)(Sheet.SpriteHeight * Scale.Y)), 
+            Sheet.GetRectangleFrom(SpriteCoordX, SpriteCoordY),
             Color,
             Rotation,
             Vector2.Zero, 
             Effect, 
             1
         );
-
-        #region Getters and Setters
-        public void SetRectangle(Rectangle rectangle)
-        {
-            rect = new(source.X + rectangle.X, source.Y + rectangle.Y, rectangle.Width, rectangle.Height);
-        }
-
-        public Rectangle GetRectangle(Rectangle rectangle) => new(rectangle.X - source.X, rectangle.Y - source.Y, rectangle.Width, rectangle.Height);
-        #endregion
     }
 }

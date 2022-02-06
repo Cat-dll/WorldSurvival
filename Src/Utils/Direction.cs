@@ -5,11 +5,16 @@ namespace WorldSurvival.Utils
     public struct Direction
     {
         public static readonly Direction North = new(0, -1);
+
         public static readonly Direction South = new(0, 1);
+
         public static readonly Direction West =  new(-1, 0);
+
         public static readonly Direction East =  new(1, 0);
 
-        public int Dx, Dy;
+        public int Dx { get; private set; } 
+        
+        public int Dy { get; private set; } 
         
         public Direction(int dx, int dy)
         {

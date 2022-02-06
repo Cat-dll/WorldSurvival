@@ -1,3 +1,3 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/HP/source/repos/WorldSurvival/Content/AllAssetsPreview.png","C:/Users/HP/source/repos/WorldSurvival/Content/bin/Windows/Environment.xnb","TextureProcessor","Texture2DContent",38162,467029,4.322367
-"C:/Users/HP/source/repos/WorldSurvival/Content/File.spritefont","C:/Users/HP/source/repos/WorldSurvival/Content/bin/Windows/GameFont.xnb","FontDescriptionProcessor","SpriteFontContent",2008,21538,1.6304561
+"C:/Users/HP/source/repos/WorldSurvival/Content/AllAssetsPreview.png","C:/Users/HP/source/repos/WorldSurvival/Content/bin/Windows/Environment.xnb","TextureProcessor","Texture2DContent",38162,467029,2.0790918
+"C:/Users/HP/source/repos/WorldSurvival/Content/File.spritefont","C:/Users/HP/source/repos/WorldSurvival/Content/bin/Windows/GameFont.xnb","FontDescriptionProcessor","SpriteFontContent",2008,21538,0.7641642
