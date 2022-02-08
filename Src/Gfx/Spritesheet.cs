@@ -25,7 +25,5 @@ namespace WorldSurvival.Gfx
             this.Width = source.Width / SpriteWidth;
             this.Height = source.Height / SpriteHeight;
         }
-
-        public Rectangle GetRectangleFrom(int spriteCoordX, int spriteCoordY) => new(spriteCoordX * SpriteWidth, spriteCoordY * SpriteHeight, SpriteWidth, SpriteHeight);
     }
 }

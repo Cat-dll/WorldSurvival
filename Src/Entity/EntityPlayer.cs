@@ -1,23 +1,20 @@
 using WorldSurvival.Utils;
 using WorldSurvival.Gfx;
-using WorldSurvival.Gfx.Animation;
 
 namespace WorldSurvival.Entity
 {
     public class EntityPlayer : Entity
     {
-        private AnimationPlayer animation;
-
-        private Sprite sprite;
+        protected Sprite sprite;
 
         public float Speed { get; set; } = 120;
 
         public EntityPlayer(Vector2 pos) : base(pos)
         {
-            this.sprite = new Sprite(Resources.WORLD_SPRITESHEET, 0, 0);
-            sprite.Scale = new Vector2(2, 2);
-
-            this.animation = new AnimationPlayer(sprite, Resources.PLAYER_ANIMATION, 0.2f);
+            this.sprite = new Sprite(Resources.WORLD_SPRITESHEET, 8, 5) { 
+                Scale = Vector2.One * 2, // (2, 2)
+                Color = Color.Blue
+            };
         }
 
         public override void Tick()
@@ -37,29 +34,20 @@ namespace WorldSurvival.Entity
 
         public override void Render() => this.sprite.Render(Position.X, Position.Y);
 
-        public override void OnDirectionChange(object sender)
-        {
-            if (Direction == Direction.East || Direction == Direction.West)
-            {
-                animation.Play("PlayerWlkWst");
-                sprite.Effect = Direction == Direction.East ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            }
+       // public override void OnDirectionChange(object sender)
+      //  {
 
-            if (Direction == Direction.North)
-                animation.Play("PlayerWlkNth");
-            if (Direction == Direction.South)
-                animation.Play("PlayerWlkSth");
-        }
+       // }
 
-        public override void OnMove(object sender)
-        {
-            animation.Animate(true);
-        }
+       // public override void OnMove(object sender)
+       // {
 
-        public override void OnIdle(object sender)
-        {
-            animation.Reset();
-        }
+      //  }
+
+       // public override void OnIdle(object sender)
+       // {
+
+      //  }
 
         public Sprite GetSprite() => sprite;
     }

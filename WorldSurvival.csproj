@@ -6,8 +6,10 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+      <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
+    <NullableReferenceTypes>true</NullableReferenceTypes>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
