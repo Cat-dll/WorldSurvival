@@ -4,20 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorldSurvival
+namespace FishGame
 {
     public static class GameSettings
     {
-        public const int GameMajorVersion = 0;
+        public const int WINDOW_WIDTH = 1024;
 
-        public const int GameMinorVersion = 2;
+        public const int WINDOW_HEIGHT = 768;
 
-        public const int GamePatchVersion = 0;
+        public const string WINDOW_TITLE = "Mini world";
 
-        public const string GameTitle = "World Survival";
-
-        public const int GameWidth = 1024;
-
-        public const int GameHeight = 768;
+        public const int GAME_TICKS = 60;
     }
 }

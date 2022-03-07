@@ -1,30 +1,26 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WorldSurvival.Utils
+namespace FishGame.Utils
 {
     public static class Time
     {
-        public static DateTime Now { get; private set; }
+        public static ulong Frames { get; private set; }
 
-        public static int Frames { get; private set; } = 0;
+        public static float Frametime { get; private set; }
 
-        public static float CurrentFrameTime { get; private set; } = 0;
+        public static int FPS { get; private set; }
 
-        public static int CurrentFps { get; private set; } = 0;
+        public const int MAX_FPS = 10000;
 
-        public static int Tps { get; private set; } = 60;
-
-        //public int FPS { get; private set; }
-
-
-        public static void Calculate(GameTime gameTime)
+        public static void Update(GameTime gameTime)
         {
-            Now = DateTime.Now;
-            CurrentFrameTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            CurrentFps = (int)Math.Round(1.0f / CurrentFrameTime);
-
             Frames++;
+            Frametime = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            FPS = (int)(MAX_FPS / Frametime / MAX_FPS);
         }
     }
 }

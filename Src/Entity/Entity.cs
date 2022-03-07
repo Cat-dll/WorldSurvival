@@ -1,81 +1,73 @@
 ﻿using System;
-using WorldSurvival.Utils;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FishGame.Utils;
 
-namespace WorldSurvival.Entity
+namespace FishGame.Entity
 {
     public class Entity
     {
-        protected Vector2 LastPosition;
+        public string Name { get; set; }
 
-        protected Vector2 Position;
 
-        public Color Color;
+        public float PreviousPosX { get; protected set; }
 
-        protected Direction LastDirection;
+        public float PreviousPosY { get; protected set; }
 
-        public Direction Direction;
+        public float PosX { get; set; }
 
-        public delegate void EntityEventHandler(object sender);
+        public float PosY { get; set; }
 
-        public event EntityEventHandler DirectionChangeEvent;
 
-        public event EntityEventHandler MoveEvent;
+        protected Direction previousDirection;
+        
+        public Direction Direction { get; set; }
 
-        public event EntityEventHandler IdleEvent;
+        public bool IsMoving { get; protected set; }
 
-        // TODO: Implement swimming
-        //public event EventHandler OnSwim;
-
-        public Entity(Vector2 position)
+        public Entity(string pName)
         {
-            this.Position = position;
-            this.LastPosition = this.Position;
+            this.Name = pName;
 
-            this.Direction = Direction.South;
-            this.LastDirection = new Direction();
-            this.Color = Color.White;
+            this.PreviousPosX = 0;
+            this.PreviousPosY = 0;
+            this.PosX = PreviousPosX;
+            this.PosY = PreviousPosY;
 
-            this.DirectionChangeEvent += OnDirectionChange;
-            this.MoveEvent += OnMove;
-            this.IdleEvent += OnIdle;
+            this.previousDirection = Direction.NONE;
+            this.Direction = previousDirection;
         }
 
         public virtual void Tick()
         {
-            float dx = Position.X - LastPosition.X, dy = Position.Y - LastPosition.Y;
-            if (dx != 0 || dy != 0)
-                this.Direction = Direction.Get(dx, dy);
+            previousDirection = this.Direction;
 
-            if (LastDirection != Direction)
-                DirectionChangeEvent?.Invoke(this);
-            if (LastPosition != Position)
-                MoveEvent?.Invoke(this);
-            else
-                IdleEvent?.Invoke(this);
-
-            this.LastPosition = Position;
-            this.LastDirection = Direction;
+            Vector2 posDiff = new(PosX - PreviousPosX, PosY - PreviousPosY);
+            this.IsMoving = posDiff != Vector2.Zero;
+            this.Direction = Direction.GetDirection(posDiff);
         }
 
-        public virtual void Render() { /* VOID */ }
+        public virtual void Update()
+        { 
+            
+        }
 
-        public virtual void Update() { /* VOID */ }
+        public virtual void Render()
+        { 
+        
+        }
 
-        public void Move(float vx, float vy)
+        public void Move(float velocity)
         {
-            if (vx == 0 && vy == 0)
-                return;
-
-            Position.X += vx * Time.CurrentFrameTime;
-            Position.Y += vy * Time.CurrentFrameTime;
+            if (velocity != 0)
+            {
+                this.PosX += this.Direction.Dx * (velocity * Time.Frametime);
+                this.PosY += this.Direction.Dy * (velocity * Time.Frametime);
+            }
+            
+            // NOTE: Manage collision and other things
         }
-
-        public virtual void OnDirectionChange(object sender) { }
-        public virtual void OnMove(object sender) { }
-
-        public virtual void OnIdle(object sender) { }
-
-        public Vector2 GetPosition() => this.Position;
-
     }
-}
+}    

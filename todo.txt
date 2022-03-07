@@ -1,0 +1,6 @@
+﻿# Main #
+
+- Modifier l'asset manager pour être plus << permissif >> au niveau des erreurs
+- Améliorer la structure de l'Asset Manager (Object, Generics, Tasks, etc...)
+- Implémenter les AssetLoaders nécessaire
+- Créer une classe pour gérer le rendu

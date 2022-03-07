@@ -3,32 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorldSurvival.Entity;
 
-namespace WorldSurvival
+using FishGame.Gfx;
+
+namespace FishGame
 {
     public class GameState : IState
     {
-        public EntityPlayer Player;
+        public Sprite PlayerSprite;
 
         public GameState()
         {
-            this.Player = new EntityPlayer(new Vector2(GameSettings.GameWidth / 2.0f, GameSettings.GameHeight / 2.0f));
+            this.PlayerSprite = new Spritesheet(MiniWorld.Instance.Texture, 8, 8).GetSprite(2, 2);
         }
 
         public void Tick()
         {
-            Player.Tick();
-        }
 
+        }
+         
         public void Update()
         {
-            Player.Update();
+
         }
 
         public void Render()
         {
-            Player.Render();
+            PlayerSprite.Render(3, 3);
         }
     }
 }

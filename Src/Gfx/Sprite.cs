@@ -1,53 +1,56 @@
-﻿using WorldSurvival.Tile;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WorldSurvival.Gfx
+namespace FishGame.Gfx
 {
     public class Sprite
     {
-        public Spritesheet Sheet { get; set; }
+        public Texture2D Texture { get; protected set; }
 
-        public int FrameX { get; set; }
+        public Rectangle source;
 
-        public int FrameY { get; set; }
+        public Color color;
 
-        // NOTE: (Je ne suis pas capable de trouver d'autre nom) 
-        public int FrameWidth { get; set; } // NOTE: Représente la taille en tile/frame que le sprite utilise (ET non la taille en pixel des frames)
-
-        public int FrameHeight { get; set; }
+        public int ScaleX { get; set; }
+        
+        public int ScaleY { get; set; }
 
         public float Rotation { get; set; }
 
-        public Vector2 Scale { get; set; }
+        public SpriteEffects Effects { get; set; }
 
-        public Color Color { get; set; }
-
-        public SpriteEffects Effect { get; set; }
-
-        public Sprite(Spritesheet pSheet, int pFrameX, int pFrameY)
+        public Sprite(Texture2D pTexture, Color pColor)
         {
-            this.Sheet = pSheet;
-            this.FrameX = pFrameX;
-            this.FrameY = pFrameY;
-            this.FrameWidth = 1;
-            this.FrameHeight = 1;
+            this.Texture = pTexture;
+            this.color = pColor;
 
+            this.source = pTexture.Bounds;
+            this.ScaleX = 1;
+            this.ScaleY = 1;
             this.Rotation = 0.0f;
-            this.Scale = Vector2.One;
-            this.Color = Color.White;
-            this.Effect = SpriteEffects.None;
         }
 
-        public void Render(float pX, float pY) => WorldSurvival.Batch.Draw(
-            Sheet.Source,
-            new Vector2(pX, pY),
-            new Rectangle(FrameX * Sheet.SpriteWidth, FrameY * Sheet.SpriteHeight, FrameWidth * Sheet.SpriteWidth, FrameHeight * Sheet.SpriteHeight),
-            Color,
-            Rotation,
-            Vector2.Zero,
-            Scale,
-            Effect,
-            1
-        );
+        public Sprite(Texture2D pTexture, Rectangle pSource, Color pColor) : this(pTexture, pColor)
+        {
+            if (pSource.Y < pTexture.Width && pSource.Y < pTexture.Height)
+                this.source = pSource;
+        }
+
+        public void Render(float pX, float pY)
+        {
+            MiniWorld.Instance.Batch.Draw(Texture, 
+                new(pX, pY),                 // Position
+                source,                      // Texture source
+                color,                       // Sprite color
+                Rotation,                    // Sprite rotation
+                Vector2.Zero,                // Sprite draw origin
+                new Vector2(ScaleX, ScaleY), // Sprite scaling
+                Effects,                     // Sprite effects
+                1                            // Sprite Depth
+            );
+        }
     }
 }
